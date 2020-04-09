@@ -4,6 +4,16 @@ import argparse
 
 KEY_LENGTH = 16
 
+def process(input_file, output_file):
+    arr = get_color_values(input_file)
+    key = arr[:KEY_LENGTH]
+    data = arr[KEY_LENGTH:]
+
+    for i in range(len(data)):
+        data[i] ^= key[i % KEY_LENGTH]
+
+    with open(output_file, "wb") as o:
+        o.write(data)
 
 def get_color_values(file_name):
     arr = bytearray()
@@ -15,18 +25,6 @@ def get_color_values(file_name):
             if (r, g, b, t) != (0, 0, 0, 0):
                 arr.extend([r, g, b])
     return arr
-
-
-def process(input_file, output_file):
-    arr = get_color_values(input_file)
-    key = arr[:KEY_LENGTH]
-    data = arr[KEY_LENGTH:]
-
-    for i in range(len(data)):
-        data[i] ^= key[i % KEY_LENGTH]
-
-    with open(output_file, "wb") as o:
-        o.write(data)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
